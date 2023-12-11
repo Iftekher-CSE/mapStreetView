@@ -1,51 +1,19 @@
-import React from 'react';
-import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
-import { GOOGLE_MAPS_API_KEY } from './googleMapKey';
+import { APIProvider, Map, Marker } from '@vis.gl/react-google-maps';
+import GOOGLE_MAPS_API_KEY from './googleMapKey.js';
 
-const containerStyle = {
-  width: '1500px',
-  height: '700px',
-};
+function App() {
+  const position = { lat: 53.54992, lng: 10.00678 };
 
-const center = {
-  lat: -3.745,
-  lng: -38.523,
-};
-
-function MyComponent() {
-  const { isLoaded } = useJsApiLoader({
-    id: 'google-map-script',
-    googleMapsApiKey: GOOGLE_MAPS_API_KEY,
-  });
-
-  const [map, setMap] = React.useState(null);
-
-  const onLoad = React.useCallback(function callback(map) {
-    // This is just an example of getting and using the map instance!!! don't just blindly copy!
-    const bounds = new window.google.maps.LatLngBounds(center);
-    map.fitBounds(bounds);
-
-    setMap(map);
-  }, []);
-
-  const onUnmount = React.useCallback(function callback(map) {
-    setMap(null);
-  }, []);
-
-  return isLoaded ? (
-    <GoogleMap
-      mapContainerStyle={containerStyle}
-      center={center}
-      zoom={10}
-      onLoad={onLoad}
-      onUnmount={onUnmount}
-    >
-      {/* Child components, such as markers, info windows, etc. */}
-      <></>
-    </GoogleMap>
-  ) : (
-    <></>
+  return (
+    <div style={{ height: '700px' }}>
+      <APIProvider apiKey={GOOGLE_MAPS_API_KEY}>
+        <Map center={position} zoom={10}>
+          <div>"Bangladesh"</div>
+          <Marker position={position} />
+        </Map>
+      </APIProvider>
+    </div>
   );
 }
 
-export default React.memo(MyComponent);
+export default App;
